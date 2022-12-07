@@ -45,6 +45,7 @@ public class Day6 {
         String line = lines.get(0);
         StringBuilder currentSection = new StringBuilder();
         PriorityQueue<Integer> matches = new PriorityQueue<>();
+        //Fill up the initial 14 characters
         for (int i = 0; i < RECCURENCE_LENGTH; i++) {
             char currentChar = line.charAt(i);
             int lastIndex = currentSection.lastIndexOf("" + currentChar);
@@ -53,18 +54,22 @@ public class Day6 {
             }
             currentSection.append(currentChar);
         }
+        //Loop through the next characters
         int length = line.length();
         for (int i = RECCURENCE_LENGTH; i < length; i++) {
+            //Removed any matches that have become obsolete
             while (matches.size() != 0 && i - RECCURENCE_LENGTH >= matches.element()) {
                 matches.poll();
             }
             currentSection.deleteCharAt(0);
             char currentChar = line.charAt(i);
+            //Add a new match if a new one has appeared
             int lastIndex = currentSection.lastIndexOf("" + currentChar);
             if (lastIndex != -1) {
                 matches.add((i - RECCURENCE_LENGTH) + lastIndex + 1);
             }
             currentSection.append(currentChar);
+            //If there are no matches, we are done
             if (matches.size() == 0) {
                 return i + 1;
             }
